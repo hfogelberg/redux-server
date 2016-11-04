@@ -1,40 +1,31 @@
-const express = require('express'),
-            app = express(),
-            logger = require('morgan'),
-            PORT = process.env.PORT || 9000,
-            apiRouter = express.Router();
+var express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    logger = require('morgan'),
+    path = require('path'),
+    port = process.env.PORT || 3000,
+    cors = require('cors');
+
+const apiRouter = require('express').Router();
 
 // Basic config
 app.set('port', port);
+app.use(cors());
 app.use(express.static('public'));
 app.use(logger('dev'));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 // API routing
-require('./server/api')(apiRouter);
+require('./api')(apiRouter);
 app.use('/api', apiRouter);
 
 // Default route
-app.use(express.static(path.resolve(__dirname, '..', 'build')));
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+app.get('*', function(req, res) {
+ res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
-
-app.listen(config.port, function(err){
+app.listen(port, function(err){
   if(err) throw err;
   console.log('App listening on port ' + port);
 });
-
-
-
-
-
-
-
-// 'use strict';
-// const app = require('./app');
-// const PORT = process.env.PORT || 9000;
-//
-// app.listen(PORT, () => {
-//   console.log(`App listening on port ${PORT}`);
-// });
