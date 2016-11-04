@@ -6,6 +6,7 @@ var express = require('express'),
     port = process.env.PORT || 3000,
     cors = require('cors');
 
+
 const apiRouter = require('express').Router();
 
 // Basic config
@@ -20,11 +21,10 @@ app.use(bodyParser.json());
 require('./api')(apiRouter);
 app.use('/api', apiRouter);
 
-// Default route
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
-// Always return the main index.html, so react-router render the route in the client
+// Return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
